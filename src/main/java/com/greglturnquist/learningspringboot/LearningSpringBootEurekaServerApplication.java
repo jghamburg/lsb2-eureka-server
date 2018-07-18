@@ -31,18 +31,18 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @EnableEurekaServer
 public class LearningSpringBootEurekaServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(
-			LearningSpringBootEurekaServerApplication.class);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(
+        LearningSpringBootEurekaServerApplication.class);
+  }
 
-	@Bean
-	UserDetailsService userDetailsService() {
-		return new InMemoryUserDetailsManager(
-			User
-				.withUsername("user")
-				.password("password")
-				.roles("USER").build());
-	}
+  @Bean
+  UserDetailsService userDetailsService() {
+    return new InMemoryUserDetailsManager(
+        User.withUsername("user")
+            .password("{noop}password")
+            .roles("USER").build());
+  }
+
 }
 // end::code[]
