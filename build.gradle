@@ -81,6 +81,10 @@ jib {
   }
 }
 
+configurations {
+	all*.exclude group: 'ch.qos.logback', module: 'logback-classic'
+}
+
 dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
 	// tag::code[]
