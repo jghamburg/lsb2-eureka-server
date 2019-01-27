@@ -1,11 +1,11 @@
 buildscript {
 	ext {
-		springCloudVersion = 'Finchley.RELEASE'
+		springCloudVersion = 'Greenwich.RELEASE'
 	}
 }
 
 plugins {
-	id 'org.springframework.boot' version '2.0.4.RELEASE' apply true
+	id 'org.springframework.boot' version '2.1.2.RELEASE' apply true
 	// tag::gradle-git[]
 	id 'com.gorylenko.gradle-git-properties' version '1.4.17'
 	// end::gradle-git[]
@@ -66,14 +66,14 @@ composeUp.dependsOn composeBuild
 
 jib {
   from {
-    image = 'docker.obc.ov.otto.de/base/openjdk:8-jre-alpine'
+    image = 'openjdk:8-jre-alpine'
   }
   to {
-    image = "docker.obc.ov.otto.de/jib/lsb2-eureka-server:local"
+    image = "jghamburg/lsb2-eureka-server:local"
 //    credHelper = 'osxkeychain'
   }
   container {
-    jvmFlags = ['-Djava.security.egd=file:/dev/./urandom', '-Xms512m', '-Xdebug', "-Dspring.profiles.active=local"]
+    jvmFlags = ['-Djava.security.egd=file:/dev/./urandom', '-Xms512m', '-Xdebug', '-Dspring.profiles.active=local']
     mainClass = 'com.greglturnquist.learningspringboot.LearningSpringBootEurekaServerApplication'
     args = []
     ports = ['8080']
