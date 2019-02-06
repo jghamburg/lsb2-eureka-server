@@ -1,28 +1,45 @@
-buildscript {
-	ext {
-		springCloudVersion = 'Greenwich.RELEASE'
-	}
-}
-
 plugins {
-	id 'org.springframework.boot' version '2.1.2.RELEASE' apply true
-	// tag::gradle-git[]
-	id 'com.gorylenko.gradle-git-properties' version '1.4.17'
-	// end::gradle-git[]
-	id 'idea'
-	id 'java-gradle-plugin'
-	id 'com.avast.gradle.docker-compose' version '0.8.4'
-	id 'com.google.cloud.tools.jib' version '0.9.8'
+  id 'org.springframework.boot' version '2.1.2.RELEASE' apply true
+  id 'java'
+  id 'idea'
+  id 'com.gorylenko.gradle-git-properties' version '2.0.0'
+  id 'com.avast.gradle.docker-compose' version '0.8.13'
+  id 'com.google.cloud.tools.jib' version '1.0.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+ext {
+  set('springCloudVersion', 'Greenwich.RELEASE')
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
 
 repositories {
-	jcenter()
+  mavenCentral()
+  maven { url 'https://repo.spring.io/milestone' }
 }
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter-security'
+  implementation 'org.springframework.cloud:spring-cloud-starter-config'
+  implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+  runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+  compileOnly 'org.projectlombok:lombok'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  testImplementation 'org.springframework.security:spring-security-test'
+}
+
+dependencyManagement {
+  imports {
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+  }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 jar {
 	baseName = 'learning-spring-boot-eureka-server'
@@ -81,22 +98,3 @@ jib {
   }
 }
 
-configurations {
-	all*.exclude group: 'ch.qos.logback', module: 'logback-classic'
-}
-
-dependencies {
-	compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-server')
-	// tag::code[]
-	compile('org.springframework.cloud:spring-cloud-starter-config')
-	// end::code[]
-	// tag::secured[]
-	compile('org.springframework.boot:spring-boot-starter-security')
-	// end::secured[]
-}
-
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
-}
