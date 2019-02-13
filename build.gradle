@@ -1,5 +1,7 @@
 plugins {
   id 'org.springframework.boot' version '2.1.2.RELEASE' apply true
+  id "io.spring.dependency-management" version "1.0.6.RELEASE"
+  id 'io.franzbecker.gradle-lombok' version '2.0'
   id 'java'
   id 'idea'
   id 'com.gorylenko.gradle-git-properties' version '2.0.0'
@@ -7,15 +9,13 @@ plugins {
   id 'com.google.cloud.tools.jib' version '1.0.0'
 }
 
-apply plugin: 'io.spring.dependency-management'
-
 ext {
   set('springCloudVersion', 'Greenwich.RELEASE')
+  set('activeSpringProfiles', 'local')
 }
 
 group = 'com.gregturnquist.learningspringboot'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
 
 repositories {
   mavenCentral()
@@ -27,7 +27,6 @@ dependencies {
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
   runtimeOnly 'org.springframework.boot:spring-boot-devtools'
-  compileOnly 'org.projectlombok:lombok'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.security:spring-security-test'
 }
@@ -41,9 +40,19 @@ dependencyManagement {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-jar {
-	baseName = 'learning-spring-boot-eureka-server'
-	version = '0.0.1-SNAPSHOT'
+lombok {
+  version = '1.18.4'
+  sha256 = ""
+}
+
+repositories {
+  jcenter()
+}
+
+bootJar {
+  baseName = 'lsb2-eureka-server'
+  version = ''
+  excludeDevtools = false
 }
 /*
  * docker-compose plugin configuration.

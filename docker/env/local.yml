@@ -5,17 +5,18 @@ services:
   # service name has to be environment-unique, else one startup will shutdown others
   local-eureka-server:
     labels:
-      de.otto.template.description: "Eureka Server for local environment"
-      de.otto.drop.brandshopupdater.version: "local"
+      lsb2.template.description: "Eureka Server for local environment"
+      lsb2.brandshopupdater.version: "local"
     image: "eureka-server:local"
     build:
       context: ../..
       dockerfile: ./docker/Dockerfile
+      args:
+        JAR_FILE: ./build/libs/lsb2-eureka-server.jar
     ports:
       - "8761:8761" # web port
     environment:
       PROFILE: "local"
-      OTTO_GROUP: "local"
     networks:
       - learn-ms-network
 
