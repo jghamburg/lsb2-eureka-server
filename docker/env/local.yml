@@ -6,8 +6,8 @@ services:
   local-eureka-server:
     labels:
       lsb2.template.description: "Eureka Server for local environment"
-      lsb2.brandshopupdater.version: "local"
-    image: "eureka-server:local"
+      lsb2.eurecka-server.version: "local"
+    image: "jghamburg/lsb2-eureka-server:local"
     build:
       context: ../..
       dockerfile: ./docker/Dockerfile
