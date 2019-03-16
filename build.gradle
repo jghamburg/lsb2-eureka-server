@@ -1,3 +1,4 @@
+
 plugins {
   id 'org.springframework.boot' version '2.1.2.RELEASE' apply true
   id "io.spring.dependency-management" version "1.0.6.RELEASE"
@@ -7,6 +8,7 @@ plugins {
   id 'com.gorylenko.gradle-git-properties' version '2.0.0'
   id 'com.avast.gradle.docker-compose' version '0.8.13'
   id 'com.google.cloud.tools.jib' version '1.0.0'
+  id "ca.cutterslade.helm" version "1.0.0-beta-9"
 }
 
 ext {
@@ -32,6 +34,7 @@ dependencies {
   implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
   implementation 'javax.xml.bind:jaxb-api:2.3.1'
   implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
+  implementation 'com.squareup.okhttp3:okhttp:3.11.0'
   runtimeOnly 'org.springframework.boot:spring-boot-devtools'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.security:spring-security-test'
@@ -54,6 +57,62 @@ bootJar {
   version = ''
   excludeDevtools = false
 }
+
+helm {
+  install {
+    // allows configuration of various details of the helm installation managed
+    // by the plugin. The only option that is likely to require customisation
+    // is the helm version to use. Each version of the plugin will default to
+    // the newest version of helm available at the time.
+    version = 'v2.13.0'
+  }
+  repository {
+    // allows configuration of the repository to which the publish tasks will
+    // upload the packaged chart.
+    type 'chartmuseum'
+    url 'http://chartmuseum.local.svc.cluster.local/api/charts'
+    // username 'myusername'
+    // password 'isasecret'
+    // authRealm 'repository authentication realm'
+    requestHeaders = [
+      ['HeaderName:', 'header value'],
+      ['OtherHeader:', 'other value']
+    ]
+//    clientConfigurator = { OkHttpClient.Builder builder ->
+//      // Allows arbitrary configuration of the HTTP client
+//    }
+  }
+}
+
+charts {
+  // The charts extension allows you to define an arbitrary number of charts
+  // which the plugin will manage. Each chart is defined in a block using the
+  // name of the chart; the generated task names depend on the chart name.
+  lsb2EurekaServer {
+    // Within the chart block, a few options can be defined:
+    
+    // If not set, the chart version defaults to the project version. Note
+    // that helm requires charts use symantic versioning, so if your project
+    // does not, you will have to define a version like this.
+    //chartVersion '1.2.3'
+    
+    // If not set, the app version defaults to the project version. Helm does
+    // not enforce any requirements on the app version
+    // appVersion '1.2.3.down-with^semver'
+    
+    // If not set, the chart directory defaults to
+    // 'src/helm/resources/${chartName}'. If the chart directory is outside of
+    // 'src/helm/resources' extra configuration will be required to have the
+    // chart files processed into the helm source set output directory.
+    // chartDir "src/main/helm/lsb2-eureka-server"
+    
+    // Each chart can include configuration which changes how the chart is
+    // validated by the lint command.
+    // lint.values = ['valueKey':'some value']
+    // lint.valuesFiles = ['lint-values.yaml']
+  }
+}
+
 /*
  * docker-compose plugin configuration.
  * Details on https://github.com/avast/gradle-docker-compose-plugin
