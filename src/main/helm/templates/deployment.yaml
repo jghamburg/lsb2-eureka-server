@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "lsb2EurekaServer.fullname" . }}
+  name: {{ include "lsb2-eureka-server.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "lsb2EurekaServer.name" . }}
-    helm.sh/chart: {{ include "lsb2EurekaServer.chart" . }}
+    app.kubernetes.io/name: {{ include "lsb2-eureka-server.name" . }}
+    helm.sh/chart: {{ include "lsb2-eureka-server.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "lsb2EurekaServer.name" . }}
+      app.kubernetes.io/name: {{ include "lsb2-eureka-server.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "lsb2EurekaServer.name" . }}
+        app.kubernetes.io/name: {{ include "lsb2-eureka-server.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       containers:
@@ -25,15 +25,15 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: 80
+              containerPort: {{ .Values.app.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /actuator/health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /actuator/health
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

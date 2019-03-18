@@ -17,7 +17,7 @@ nameOverride: ""
 fullnameOverride: "lsb2-eureka-server"
 
 service:
-  name: lsb2EurekaServer
+  name: lsb2-ureka-server
   type: ClusterIP
   port: 80
 
