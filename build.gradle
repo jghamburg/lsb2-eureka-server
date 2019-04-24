@@ -8,14 +8,15 @@ plugins {
   id 'com.gorylenko.gradle-git-properties' version '2.0.0'
   id 'com.avast.gradle.docker-compose' version '0.8.13'
   id 'com.google.cloud.tools.jib' version '1.0.0'
-  id 'org.unbroken-dome.helm' version '0.3.0'
-  id 'org.unbroken-dome.helm-publish' version '0.3.0'
-  id 'org.unbroken-dome.helm-releases' version '0.3.0'
+  id 'org.unbroken-dome.helm' version '0.3.1'
+  id 'org.unbroken-dome.helm-publish' version '0.3.1'
+  id 'org.unbroken-dome.helm-releases' version '0.3.1'
 }
 
 ext {
   set('springCloudVersion', 'Greenwich.RELEASE')
   set('activeSpringProfiles', 'local')
+  set('chartRepoUrl', 'http://chartmuseum.local.svc.cluster.local/')
 }
 
 group = 'com.gregturnquist.learningspringboot'
@@ -42,8 +43,8 @@ dependencies {
   testImplementation 'org.springframework.security:spring-security-test'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 lombok {
   version = '1.18.4'
@@ -92,7 +93,7 @@ helm {
 //  }
   repositories {
       museum {
-          url = uri('http://chartmuseum.local.svc.cluster.local/')
+          url = uri(chartRepoUrl)
       }
   }
   // helm-release plugin config
@@ -116,7 +117,7 @@ helm {
   publishing {
       repositories {
           museum {
-              url = uri('http://chartmuseum.local.svc.cluster.local/')
+              url = uri(chartRepoUrl)
           }
       }
   }  
