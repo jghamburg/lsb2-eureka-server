@@ -3,7 +3,7 @@ version: '3'
 
 services:
   # service name has to be environment-unique, else one startup will shutdown others
-  local-eureka-server:
+  lsb2-eureka-server:
     labels:
       lsb2.template.description: "Eureka Server for local environment"
       lsb2.eurecka-server.version: "local"
@@ -14,9 +14,10 @@ services:
       args:
         JAR_FILE: ./build/libs/lsb2-eureka-server.jar
     ports:
-      - "8761:8080" # web port
+      - "8761:8761" # web port
     environment:
-      PROFILE: "local"
+      PROFILE: "default"
+      PORT: 8761
     networks:
       - learn-ms-network
 

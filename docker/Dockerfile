@@ -20,8 +20,8 @@ ENV JAVA_HOME=/opt/jdk-11-minimal
 ENV PATH="$PATH:$JAVA_HOME/bin"
 # app specific environment
 ENV PROFILE local
-ENV SECURITY_JWT_SECRET=""
 ENV JAVA_HEAP=768m
+ENV PORT=8761
 # secure application under separate user
 COPY docker/run.sh /app/run.sh
 RUN adduser -D -u 1000 app && echo "app:ppa" | chpasswd && \
