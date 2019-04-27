@@ -1,6 +1,6 @@
 
 plugins {
-  id 'org.springframework.boot' version '2.1.2.RELEASE' apply true
+  id 'org.springframework.boot' version '2.1.4.RELEASE' apply true
   id "io.spring.dependency-management" version "1.0.6.RELEASE"
   id 'io.franzbecker.gradle-lombok' version '2.0'
   id 'java'
@@ -14,7 +14,6 @@ plugins {
 }
 
 ext {
-  set('springCloudVersion', 'Greenwich.RELEASE')
   set('activeSpringProfiles', 'local')
   set('chartRepoUrl', 'http://chartmuseum.local.svc.cluster.local/')
 }
@@ -30,7 +29,7 @@ repositories {
 dependencies {
   // implementation platform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE')
   // enforce versions defined in bom
-  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE')
+  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR1')
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
