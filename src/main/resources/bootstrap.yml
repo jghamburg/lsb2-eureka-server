@@ -6,5 +6,5 @@ spring:
     config:
       label: session
       password: password
-      uri: http://lsb2-config-server:8888
+      uri: http://lsb2-config-server:8080
 # end::secured-config-server[]

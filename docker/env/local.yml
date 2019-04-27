@@ -14,10 +14,10 @@ services:
       args:
         JAR_FILE: ./build/libs/lsb2-eureka-server.jar
     ports:
-      - "8761:8761" # web port
+      - "8761:8080" # web port
     environment:
       PROFILE: "default"
-      PORT: 8761
+      PORT: 8080
     networks:
       - learn-ms-network
 
