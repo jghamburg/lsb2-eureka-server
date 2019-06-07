@@ -1,7 +1,7 @@
 # tag::secured-config-server[]
 spring:
   application:
-    name: eureka
+    name: lsb2-eureka
   cloud:
     config:
       label: session
