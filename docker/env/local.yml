@@ -6,8 +6,8 @@ services:
   lsb2-eureka-server:
     labels:
       lsb2.template.description: "Eureka Server for local environment"
-      lsb2.eurecka-server.version: "local"
-    image: "jghamburg/lsb2-eureka-server:local"
+      lsb2.chat.version: $TAG
+    image: "jghamburg/lsb2-eureka-server:$TAG"
     build:
       context: ../..
       dockerfile: ./docker/Dockerfile
@@ -18,11 +18,3 @@ services:
     environment:
       PROFILE: "default"
       PORT: 8080
-    networks:
-      - learn-ms-network
-
-networks:
-  learn-ms-network:
-    external: true
-
-
