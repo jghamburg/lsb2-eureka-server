@@ -11,7 +11,7 @@
     "semantic-release": "15.13.24"
   },
   "scripts": {
-    "semantic-release": "semantic-release",
+    "semantic-release": "semantic-release --ci",
     "commit": "git-cz"
   },
   "release": {
