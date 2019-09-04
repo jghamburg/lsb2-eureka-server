@@ -1,21 +1,21 @@
 
 plugins {
-  id 'org.springframework.boot' version '2.1.5.RELEASE' apply true
-  id "io.spring.dependency-management" version "1.0.7.RELEASE"
+  id 'org.springframework.boot' version '2.1.7.RELEASE' apply true
+  id "io.spring.dependency-management" version "1.0.8.RELEASE"
   id 'io.franzbecker.gradle-lombok' version '3.0.0'
   id 'java'
   id 'idea'
   id 'com.avast.gradle.docker-compose' version '0.9.4'
-  id 'com.google.cloud.tools.jib' version '1.1.2'
+  id 'com.google.cloud.tools.jib' version '1.5.1'
 
-  id 'org.unbroken-dome.helm' version '0.3.1'
-  id 'org.unbroken-dome.helm-publish' version '0.3.1'
-  id 'org.unbroken-dome.helm-releases' version '0.3.1'
+  id 'org.unbroken-dome.helm' version '0.4.0'
+  id 'org.unbroken-dome.helm-publish' version '0.4.0'
+  id 'org.unbroken-dome.helm-releases' version '0.4.0'
 
-  id 'se.patrikerdes.use-latest-versions' version '0.2.9'
-  id 'com.github.ben-manes.versions' version '0.21.0'
+  id 'se.patrikerdes.use-latest-versions' version '0.2.12'
+  id 'com.github.ben-manes.versions' version '0.24.0'
 
-  id 'de.gliderpilot.semantic-release' version '1.4.0'
+  id 'maven-publish'
 }
 
 ext {
@@ -34,7 +34,7 @@ repositories {
 dependencies {
   // implementation platform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE')
   // enforce versions defined in bom
-  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR1')
+  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR2')
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
@@ -61,8 +61,16 @@ repositories {
 
 bootJar {
   baseName = 'lsb2-eureka-server'
-  version = ''
   excludeDevtools = false
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'com.gregturnquist.learningspringboot'
+            from components.java
+        }
+    }
 }
 
 helm {
@@ -141,7 +149,7 @@ composePush.dependsOn composeBuild
 
 jib {
   from {
-    image = 'openjdk:8-jre-alpine'
+    image = 'azul/zulu-openjdk-alpine:11.0.3'
   }
   to {
     image = "jghamburg/lsb2-eureka-server:local"
@@ -153,6 +161,7 @@ jib {
     args = []
     ports = ['8080']
     format = 'OCI'
+    useCurrentTimestamp = true
   }
 }
 
