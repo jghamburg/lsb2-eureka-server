@@ -165,3 +165,8 @@ jib {
   }
 }
 
+task semanticRelease (type: Exec){
+  workingDir '.'
+  commandLine 'semantic-release', '-b', 'master', '--no-ci'
+}
+
