@@ -1,6 +1,6 @@
 
 plugins {
-  id 'org.springframework.boot' version '2.1.7.RELEASE' apply true
+  id 'org.springframework.boot' version '2.1.10.RELEASE' apply true
   id "io.spring.dependency-management" version "1.0.8.RELEASE"
   id 'io.franzbecker.gradle-lombok' version '3.0.0'
   id 'java'
@@ -34,7 +34,7 @@ repositories {
 dependencies {
   // implementation platform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE')
   // enforce versions defined in bom
-  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR2')
+  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR4')
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
@@ -170,3 +170,7 @@ task semanticRelease (type: Exec){
   commandLine 'semantic-release', '-b', 'master', '--no-ci'
 }
 
+task verifySemanticRelease (type: Exec){
+  workingDir '.'
+  commandLine 'semantic-release', '-b', 'master'
+}
