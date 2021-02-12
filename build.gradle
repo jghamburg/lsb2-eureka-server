@@ -1,6 +1,6 @@
 
 plugins {
-  id 'org.springframework.boot' version '2.4.2' apply true
+  id 'org.springframework.boot' version '2.4.2'
   id "io.spring.dependency-management" version "1.0.11.RELEASE"
   id 'io.franzbecker.gradle-lombok' version '3.0.0'
   id 'java'
@@ -19,9 +19,12 @@ plugins {
 }
 
 ext {
-  set('activeSpringProfiles', 'local')
-  set('tag', 'local')
-  set('chartRepoUrl', 'http://chartmuseum.default.svc.cluster.local/')
+  jaxbVersion = '2.3.1'
+  jaxbCoreVersion = '2.3.0.1'
+  okhttpVersion = '3.11.0'
+  springCloudVersion = '2020.0.1'
+  tag = 'k8s'
+  chartRepoUrl = 'http://chartmuseum.default.svc.cluster.local/'
 }
 
 group = 'com.gregturnquist.learningspringboot'
@@ -34,14 +37,14 @@ repositories {
 dependencies {
   // implementation platform('org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE')
   // enforce versions defined in bom
-  implementation enforcedPlatform('org.springframework.cloud:spring-cloud-dependencies:2020.0.1')
+  implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-  implementation 'com.sun.xml.bind:jaxb-core:2.3.0.1'
-  implementation 'javax.xml.bind:jaxb-api:2.3.1'
-  implementation 'com.sun.xml.bind:jaxb-impl:2.3.1'
-  implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+  implementation "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
+  implementation "javax.xml.bind:jaxb-api:${jaxbVersion}"
+  implementation "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
+  implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
   runtimeOnly 'org.springframework.boot:spring-boot-devtools'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.springframework.security:spring-security-test'
@@ -88,7 +91,7 @@ publishing {
 tasks.jib.dependsOn tasks.check
 jib {
     from {
-        image = 'gcr.io/distroless/java-debian10'
+        image = 'gcr.io/distroless/java:11'
     }
     to {
       image = 'jghamburg/lsb2-eureka-server'
@@ -99,7 +102,7 @@ jib {
         paths = file('./ssl')
     }
     container {
-      jvmFlags = ['-Djava.security.egd=file:/dev/./urandom', '-Xms256m', '-Xdebug']
+      jvmFlags = ['-Djava.security.egd=file:/dev/./urandom', '-Xmx128m', '-Xdebug']
       mainClass = 'com.greglturnquist.learningspringboot.LearningSpringBootEurekaServer'
       args = []
       ports = ['8080']
