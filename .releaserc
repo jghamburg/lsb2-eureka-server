@@ -1,0 +1,17 @@
+{
+  debug: true,
+  repositoryUrl: "https://github.com/jghamburg/lsb2-eureka-server.git",
+  "branches": ["master"],
+  "success": [],
+  "fail": [],
+  "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        "@semantic-release/changelog",
+        "@semantic-release/github",
+        "gradle-semantic-release-plugin",
+        ["@semantic-release/git", {
+            "assets": [ "gradle.properties", "CHANGELOG.md" ]
+          }]
+      ]
+}
