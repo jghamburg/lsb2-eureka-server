@@ -19,8 +19,6 @@ plugins {
 }
 
 ext {
-  jaxbVersion = '2.3.1'
-  jaxbCoreVersion = '2.3.0.1'
   okhttpVersion = '3.11.0'
   springCloudVersion = '2020.0.1'
   tag = 'k8s'
@@ -31,7 +29,6 @@ group = 'com.gregturnquist.learningspringboot'
 
 repositories {
   mavenCentral()
-  maven { url 'https://repo.spring.io/milestone' }
 }
 
 dependencies {
@@ -40,10 +37,9 @@ dependencies {
   implementation platform("org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}")
   implementation 'org.springframework.boot:spring-boot-starter-security'
   implementation 'org.springframework.cloud:spring-cloud-starter-config'
+  implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
   implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-  implementation "com.sun.xml.bind:jaxb-core:${jaxbCoreVersion}"
-  implementation "javax.xml.bind:jaxb-api:${jaxbVersion}"
-  implementation "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
+  implementation 'org.glassfish.jaxb:jaxb-runtime'
   implementation "com.squareup.okhttp3:okhttp:${okhttpVersion}"
   runtimeOnly 'org.springframework.boot:spring-boot-devtools'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -54,7 +50,7 @@ sourceCompatibility = 11
 targetCompatibility = 11
 
 lombok {
-  version = '1.18.10'
+  version = '1.18.18'
   sha256 = ""
 }
 
@@ -71,6 +67,13 @@ springBoot {
             version = "${project.version}"
         }
     }
+}
+
+bootRun {
+    jvmArgs = [
+            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5010",
+            "-Dspring.profiles.active=default",
+    ]
 }
 
 bootJar {
@@ -104,10 +107,12 @@ jib {
     container {
       jvmFlags = ['-Djava.security.egd=file:/dev/./urandom', '-Xmx128m', '-Xdebug']
       mainClass = 'com.greglturnquist.learningspringboot.LearningSpringBootEurekaServer'
+      environment = [SPRING_PROFILES_ACTIVE: "nonlive", PORT: "8080"]
       args = []
       ports = ['8080']
     }
 }
+
 helm {
     // The global lint configuration applies to all charts
     lint {

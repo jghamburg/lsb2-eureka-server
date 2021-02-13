@@ -4,6 +4,8 @@ spring:
     name: lsb2-eureka
   cloud:
     config:
+      discovery:
+        enabled: true
       label: session
       password: password
       uri: http://localhost:8888
